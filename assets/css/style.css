@@ -656,6 +656,12 @@ section {
   margin: 5px 0 10px 60px;
 }
 
+.features .icon-box h6 {
+  font-size: 17px;
+  font-weight: 500;
+  margin: 5px 0 10px 60px;
+}
+
 .features .icon-box i {
   font-size: 48px;
   float: left;
