@@ -22,7 +22,7 @@ The website is mainly written in bootstraps, but there are quite a few other lib
 ## Meta
 https://github.com/Silver15987/the-study-adda
 
-Your Name – [@Silver15987](https://twitter.com/Silver15987)
+Silver15987 – [@Silver15987](https://twitter.com/Silver15987)
 
 Distributed under no License at all. Go ham.
 
