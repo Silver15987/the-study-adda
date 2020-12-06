@@ -1,5 +1,5 @@
 # The Study Adda
-> Short blurb about what your product does.
+> A simple website for our server!
 
 This is the source code to our server's [website](https://indianstudybuddies.in). Join us in our [discord](https://discord.com/invite/672x95d) and be a part of our amazing community!
 
@@ -26,7 +26,7 @@ Your Name – [@Silver15987](https://twitter.com/Silver15987)
 
 Distributed under no License at all. Go ham.
 
-[https://github.com/Silver15987/github-link](https://github.com/dbader/)
+[https://github.com/Silver15987/github-link](https://github.com/Silver15987/)
 
 ## Contributing
 
