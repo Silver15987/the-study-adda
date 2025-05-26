@@ -696,6 +696,76 @@ section {
 }
 
 /*--------------------------------------------------------------
+# Study Timer
+--------------------------------------------------------------*/
+.timer-container {
+  text-align: center;
+  padding: 2rem;
+  background: var(--card-bg, #fff);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.timer-display {
+  font-size: 4rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  color: var(--text-color, #2c4964);
+}
+
+.timer-controls {
+  margin: 1.5rem 0;
+}
+
+.timer-controls button {
+  margin: 0 0.5rem;
+  padding: 0.5rem 1.5rem;
+}
+
+.timer-modes {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.mode-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 20px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mode-btn.active {
+  background: #96c5fd;
+  color: white;
+  border-color: #96c5fd;
+}
+
+.timer-info {
+  padding: 2rem;
+  background: var(--card-bg, #fff);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.timer-info h4 {
+  color: var(--text-color, #2c4964);
+  margin-bottom: 1rem;
+}
+
+.timer-info ol {
+  padding-left: 1.5rem;
+  color: var(--text-color, #444444);
+}
+
+.timer-info li {
+  margin-bottom: 0.5rem;
+}
+
+/*--------------------------------------------------------------
 # Frequently Asked Questions
 --------------------------------------------------------------*/
 .faq {
@@ -997,4 +1067,65 @@ section {
   background: rgba(255, 255, 255, 0.2);
   color: #fff;
   text-decoration: none;
+}
+
+/*--------------------------------------------------------------
+# Dark Mode
+--------------------------------------------------------------*/
+[data-theme="dark"] {
+  --bg-color: #1a1a1a;
+  --text-color: #ffffff;
+  --header-bg: rgba(26, 26, 26, 0.8);
+  --card-bg: #2d2d2d;
+  --border-color: #404040;
+}
+
+[data-theme="dark"] body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] #header {
+  background: var(--header-bg);
+}
+
+[data-theme="dark"] .section-bg {
+  background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .icon-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .faq-list li {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .nav-menu a {
+  color: var(--text-color);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  background: #96c5fd;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background: #7b27d8;
 }
