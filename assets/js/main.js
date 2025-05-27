@@ -223,40 +223,46 @@
     audio.play();
   }
 
-  // Timer Event Listeners
-  document.getElementById('start-timer').addEventListener('click', startTimer);
-  document.getElementById('pause-timer').addEventListener('click', pauseTimer);
-  document.getElementById('reset-timer').addEventListener('click', resetTimer);
+  // Timer Event Listeners and DOM code wrapped in DOM ready
+  $(document).ready(function() {
+    // Timer Event Listeners
+    const startBtn = document.getElementById('start-timer');
+    const pauseBtn = document.getElementById('pause-timer');
+    const resetBtn = document.getElementById('reset-timer');
+    if (startBtn) startBtn.addEventListener('click', startTimer);
+    if (pauseBtn) pauseBtn.addEventListener('click', pauseTimer);
+    if (resetBtn) resetBtn.addEventListener('click', resetTimer);
 
-  // Timer Mode Buttons
-  document.querySelectorAll('.mode-btn').forEach(button => {
-    button.addEventListener('click', () => {
-      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-      resetTimer();
+    // Timer Mode Buttons
+    document.querySelectorAll('.mode-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        resetTimer();
+      });
     });
-  });
 
-  // Dark Mode Toggle
-  const themeToggle = document.createElement('button');
-  themeToggle.className = 'theme-toggle';
-  themeToggle.innerHTML = '<i class="bx bx-moon"></i>';
-  document.body.appendChild(themeToggle);
+    // Dark Mode Toggle
+    const themeToggle = document.createElement('button');
+    themeToggle.className = 'theme-toggle';
+    themeToggle.innerHTML = '<i class="bx bx-moon"></i>';
+    document.body.appendChild(themeToggle);
 
-  // Check for saved theme preference
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
-  }
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcon(savedTheme);
+    }
 
-  themeToggle.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateThemeIcon(newTheme);
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    });
   });
 
   function updateThemeIcon(theme) {

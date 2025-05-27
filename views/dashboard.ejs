@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Adda - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+    <link href="/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="/assets/css/style-dashboard.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header" class="fixed-top">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-xl-9 d-flex align-items-center">
+                    <h1 class="logo mr-auto"><a href="/">STUDY ADDA</a></h1>
+                    <nav class="nav-menu d-none d-lg-block">
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li class="active"><a href="/dashboard">Dashboard</a></li>
+                            <li><a href="/logout">Logout</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Row 1 -->
+        <div class="dashboard-row">
+            <!-- Study Streak Widget -->
+            <div class="dashboard-widget">
+                <div class="widget-title">Study Streak</div>
+                <div>Daily Goal: <b>60 mins</b></div>
+                <div class="calendar-days">
+                    <% for(let i=0; i<7; i++) { %>
+                        <div class="calendar-day <%= i < 2 ? 'marked' : '' %>"><%= ['S','M','T','W','T','F','S'][i] %></div>
+                    <% } %>
+                </div>
+                <div class="mt-3">Current Streak: <b>2 Days</b></div>
+                <div>Longest Streak: <b>12 Days</b></div>
+            </div>
+            <!-- User Info Widget -->
+            <div class="dashboard-widget user-info">
+                <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="Profile Picture" class="user-avatar">
+                <div class="widget-title" style="margin-bottom:2px;"><%= user.username %></div>
+                <div class="user-rank">Rank: 12</div>
+            </div>
+            <!-- Calendar Widget -->
+            <div class="dashboard-widget">
+                <div class="widget-title">Study Calendar</div>
+                <div>August 2022</div>
+                <div class="calendar-days" style="flex-wrap:wrap; width:210px;">
+                    <% for(let i=1; i<=31; i++) { %>
+                        <div class="calendar-day <%= [2,3,4,5,7,12,23,24,25,26].includes(i) ? 'marked' : '' %>"><%= i %></div>
+                    <% } %>
+                </div>
+                <div class="mt-3">Current Streak: <b>2 Days</b></div>
+                <div>Longest Streak: <b>12 Days</b></div>
+            </div>
+        </div>
+        <!-- Row 2 -->
+        <div class="dashboard-row">
+            <!-- Total Study Hours Widget -->
+            <div class="dashboard-widget">
+                <div class="widget-title">Total Study Hours</div>
+                <canvas id="studyHoursChart" height="100"></canvas>
+                <div class="mt-2">Total: <b>287</b> mins &nbsp; <span style="color:#4caf50;">+6 hrs in last 7 days</span></div>
+            </div>
+            <!-- Total Tasks Widget -->
+            <div class="dashboard-widget">
+                <div class="widget-title">Total Tasks</div>
+                <div>Total: <b>120</b></div>
+                <div>Completed: <b>98</b></div>
+                <div>Abandoned: <b>12</b></div>
+                <div class="mt-2">Completion: <b>81%</b></div>
+            </div>
+            <!-- Rank Progress Widget -->
+            <div class="dashboard-widget">
+                <div class="widget-title">Rank Progress <i class="icofont-trophy" style="color:#fbc02d;"></i></div>
+                <div style="font-size:2.2rem; font-weight:700; color:#8577fb;">12</div>
+                <div class="progress-bar">
+                    <div class="progress-bar-inner" style="width: 60%;"></div>
+                </div>
+                <div class="mt-2">440 points to next level</div>
+            </div>
+        </div>
+        <!-- Row 3 -->
+        <div class="dashboard-row">
+            <!-- Leaderboard Widget -->
+            <div class="dashboard-widget">
+                <div class="widget-title">Leaderboard</div>
+                <ul class="leaderboard-list">
+                    <li><img src="https://randomuser.me/api/portraits/men/1.jpg" class="leaderboard-avatar"> <b>Pratiman</b> &mdash; 1200 pts</li>
+                    <li><img src="https://randomuser.me/api/portraits/women/2.jpg" class="leaderboard-avatar"> <b>Pratimani</b> &mdash; 1150 pts</li>
+                    <li><img src="https://randomuser.me/api/portraits/men/3.jpg" class="leaderboard-avatar"> <b>Man</b> &mdash; 1100 pts</li>
+                    <li><img src="https://randomuser.me/api/portraits/women/4.jpg" class="leaderboard-avatar"> <b>Prati</b> &mdash; 1080 pts</li>
+                    <li><img src="https://randomuser.me/api/portraits/men/5.jpg" class="leaderboard-avatar"> <b>not Pratiman</b> &mdash; 1050 pts</li>
+                </ul>
+            </div>
+            <!-- Placeholder Widgets for Expansion -->
+            <div class="dashboard-widget" style="opacity:0.5; text-align:center;">(Empty)</div>
+            <div class="dashboard-widget" style="opacity:0.5; text-align:center;">(Empty)</div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0.0/jquery.counterup.min.js"></script>
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+    <script src="/assets/vendor/aos/aos.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script>
+        // Chart.js for Total Study Hours
+        const ctx = document.getElementById('studyHoursChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['16 Jun', '17 Jun', '18 Jun', '19 Jun', '20 Jun', '21 Jun', '22 Jun'],
+                datasets: [{
+                    label: 'Minutes',
+                    data: [90, 110, 60, 30, 80, 0, 120],
+                    backgroundColor: '#96c5fd',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#f0f0f0' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Hide header on scroll down, show on scroll up
+        let lastScrollTop = 0;
+        const header = document.getElementById('header');
+        if (header) {
+            window.addEventListener('scroll', function() {
+                let st = window.pageYOffset || document.documentElement.scrollTop;
+                if (st > lastScrollTop && st > 50) {
+                    // Scroll down
+                    header.classList.add('hide-on-scroll');
+                } else {
+                    // Scroll up
+                    header.classList.remove('hide-on-scroll');
+                }
+                lastScrollTop = st <= 0 ? 0 : st;
+            }, false);
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,148 @@
+body {
+    background: #f6f8fb;
+    color: #2c4964;
+    font-family: 'Open Sans', 'Poppins', 'Roboto', sans-serif;
+}
+.dashboard-container {
+    padding-top: 90px !important;
+    padding: 40px 0 0 0;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+.dashboard-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+.dashboard-widget {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(150,197,253,0.08);
+    padding: 28px 24px;
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.widget-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #2c4964;
+}
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.user-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    border: 3px solid #96c5fd;
+}
+.user-rank {
+    background: #f6f8fb;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 0.95rem;
+    color: #8577fb;
+    margin-top: 6px;
+    font-weight: 600;
+}
+.progress-bar {
+    height: 10px;
+    background: #e7e4fe;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+.progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, #96c5fd, #8577fb);
+}
+.leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.leaderboard-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    color: #2c4964;
+}
+.leaderboard-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid #96c5fd;
+}
+.calendar-days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin-top: 8px;
+}
+.calendar-day {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: #f6f8fb;
+    font-size: 0.95rem;
+    color: #2c4964;
+    font-weight: 500;
+}
+.calendar-day.marked {
+    background: linear-gradient(135deg, #96c5fd 60%, #8577fb 100%);
+    color: #fff;
+}
+.mt-3 {
+    margin-top: 1rem;
+}
+.get-started-btn, .dashboard-btn {
+    display: inline-block;
+    padding: 8px 24px;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #96c5fd 0%, #8577fb 100%);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    transition: background 0.3s;
+    text-decoration: none;
+    margin-top: 10px;
+}
+.get-started-btn:hover, .dashboard-btn:hover {
+    background: linear-gradient(90deg, #8577fb 0%, #96c5fd 100%);
+    color: #fff;
+}
+.completion {
+    color: #F82222;
+    font-weight: 600;
+}
+@media (max-width: 991px) {
+    .dashboard-row {
+        flex-direction: column;
+    }
+}
+/* Solid header for dashboard */
+#header {
+    background: linear-gradient(90deg, #96c5fd 0%, #8577fb 100%);
+    box-shadow: 0 2px 8px rgba(150,197,253,0.12);
+    transition: none;
+    height: 72px;
+    z-index: 1000;
+}
+#header .logo a {
+    color: #fff;
+}
+#header.hide-on-scroll {
+    transform: translateY(-100%);
+    transition: transform 0.3s;
+} 
