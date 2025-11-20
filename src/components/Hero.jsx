@@ -19,7 +19,7 @@ export default function Hero() {
                             THE STUDY
                         </span>
                         <br />
-                        <span className="text-transparent bg-clip-text bg-cosmic-gradient drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">
                             ADDA
                         </span>
                     </h1>
