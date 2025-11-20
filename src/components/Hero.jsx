@@ -29,14 +29,10 @@ export default function Hero() {
                     </p>
 
                     <div className="flex flex-wrap gap-6">
-                        <button className="group relative px-8 py-4 bg-white text-black font-bold font-display tracking-wider rounded-none skew-x-[-10deg] hover:bg-accent-cyan transition-colors duration-300">
+                        <a href="https://discord.gg/Yzjfp6QHPe" target="_blank" rel="noopener noreferrer" className="group relative px-8 py-4 bg-white text-black font-bold font-display tracking-wider rounded-none skew-x-[-10deg] hover:bg-accent-cyan transition-colors duration-300">
                             <span className="block skew-x-[10deg]">START MISSION</span>
                             <div className="absolute inset-0 border border-white translate-x-1 translate-y-1 -z-10 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform"></div>
-                        </button>
-
-                        <button className="group px-8 py-4 border border-white/20 bg-white/5 backdrop-blur-md text-white font-bold font-display tracking-wider rounded-none skew-x-[-10deg] hover:bg-white/10 transition-all">
-                            <span className="block skew-x-[10deg]">LEADERBOARD</span>
-                        </button>
+                        </a>
                     </div>
                 </motion.div>
 

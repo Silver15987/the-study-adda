@@ -6,13 +6,13 @@ export default function Navbar() {
             <div className="text-2xl font-bold text-gradient">The Study Adda</div>
             <div className="flex gap-8">
                 <a href="#hero" className="text-white hover:text-purple-300 transition-colors">Home</a>
-                <a href="#leaderboard" className="text-white hover:text-purple-300 transition-colors">Leaderboard</a>
-                <a href="#members" className="text-white hover:text-purple-300 transition-colors">Members</a>
-                <a href="#events" className="text-white hover:text-purple-300 transition-colors">Events</a>
+                <a href="#factions" className="text-white hover:text-purple-300 transition-colors">Factions</a>
+                <a href="#features" className="text-white hover:text-purple-300 transition-colors">Features</a>
+                <a href="#clubs" className="text-white hover:text-purple-300 transition-colors">Clubs</a>
             </div>
-            <button className="px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-full text-white font-semibold transition-all shadow-lg hover:shadow-purple-500/50">
+            <a href="https://discord.gg/Yzjfp6QHPe" target="_blank" rel="noopener noreferrer" className="px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-full text-white font-semibold transition-all shadow-lg hover:shadow-purple-500/50">
                 Join Discord
-            </button>
+            </a>
         </nav>
     );
 }

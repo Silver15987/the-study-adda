@@ -1,18 +1,18 @@
 import Hero from '../components/Hero';
-import Leaderboard from '../components/Leaderboard';
-import MembersOfNote from '../components/MembersOfNote';
+import FactionShowcase from '../components/FactionShowcase';
+import Features from '../components/Features';
 import HallOfFame from '../components/HallOfFame';
-import Events from '../components/Events';
+import Clubs from '../components/Clubs';
 import Footer from '../components/Footer';
 
 export default function Home() {
     return (
         <>
             <Hero />
-            <Leaderboard />
-            <MembersOfNote />
+            <FactionShowcase />
+            <Features />
             <HallOfFame />
-            <Events />
+            <Clubs />
             <Footer />
         </>
     );
