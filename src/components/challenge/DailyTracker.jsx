@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function DailyTracker({ user, logs, challengeStatus, onLogDay }) {
+export default function DailyTracker({ user, logs, challengeStatus, onLogDay, readOnly }) {
     const [selectedDay, setSelectedDay] = useState(null);
     const [completedTasks, setCompletedTasks] = useState(Array(10).fill(false));
     const [note, setNote] = useState('');
@@ -27,16 +27,22 @@ export default function DailyTracker({ user, logs, challengeStatus, onLogDay }) 
     const handleDayClick = (day) => {
         if (!challengeStatus) return;
 
-        // Logic:
-        // 1. Future Day: Cannot click
-        // 2. Past Day (Locked): Can click to View Only
-        // 3. Active Day (Today/Yesterday): Can click to Edit
+        // NEW: If readOnly is true, we ONLY allow viewing history (past/completed days), 
+        // OR we allow opening the modal but enforcing "View Only" mode regardless of date.
+        // Let's enforce the "View Only" state if readOnly prop is passed.
 
         if (day > challengeStatus.dayNumber) return; // Future
 
         setSelectedDay(day);
     };
 
+    // Override isDayLocked if readOnly is true
+    const isLocked = (day) => {
+        if (readOnly) return true;
+        return isDayLocked(day);
+    }
+
+    // Logic for locking based on date
     const isDayLocked = (day) => {
         if (!challengeStatus) return true;
 
@@ -45,6 +51,8 @@ export default function DailyTracker({ user, logs, challengeStatus, onLogDay }) 
         // So day < curDay - 1 is definitely locked
         return day < challengeStatus.dayNumber - 1;
     };
+
+
 
     const handleSave = async () => {
         if (!challengeStatus) return;
@@ -72,26 +80,26 @@ export default function DailyTracker({ user, logs, challengeStatus, onLogDay }) 
     };
 
     return (
-        <div className="bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 p-6">
+        <div className="bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 p-4 md:p-6">
             <h3 className="text-xl font-bold text-white mb-6">Your 21-Day Journey</h3>
 
-            <div className="grid grid-cols-7 gap-3 mb-8">
+            <div className="grid grid-cols-7 gap-2 md:gap-3 mb-8">
                 {days.map((day) => {
                     const log = logs.find(l => l.dayNumber === day);
                     const isCompleted = !!log;
                     const isFuture = challengeStatus ? day > challengeStatus.dayNumber : true;
                     // Locked if past window
-                    const isLocked = isDayLocked(day);
+                    const isLockedVal = isLocked(day);
                     const isToday = challengeStatus?.dayNumber === day;
 
                     let bgClass = "bg-white/5 border-white/10 text-gray-400";
                     if (isFuture) {
                         bgClass = "opacity-30 cursor-not-allowed border-none";
                     } else if (isCompleted) {
-                        bgClass = isLocked
+                        bgClass = isLockedVal
                             ? "bg-cyan-900/20 border-cyan-900/50 text-cyan-700" // Completed & Locked (History)
                             : "bg-cyan-500/20 border-cyan-500 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.3)]"; // Completed & Editable
-                    } else if (isLocked) {
+                    } else if (isLockedVal) {
                         bgClass = "bg-red-900/10 border-red-900/20 text-red-900/50 line-through decoration-red-900/50"; // Missed & Locked
                     } else if (isToday) {
                         bgClass = "bg-white/10 border-white/40 text-white animate-pulse-slow border-dashed"; // Today (Active, no log yet)
@@ -110,7 +118,7 @@ export default function DailyTracker({ user, logs, challengeStatus, onLogDay }) 
                             {/* History Score Badge */}
                             {log && <span className="text-[10px] mt-1 opacity-80">{log.dailyScore}/10</span>}
                             {/* Missed Badge */}
-                            {!log && isLocked && !isFuture && <span className="text-[8px] mt-0.5 text-red-500/50">MISSED</span>}
+                            {!log && isLockedVal && !isFuture && <span className="text-[8px] mt-0.5 text-red-500/50">MISSED</span>}
                         </motion.button>
                     );
                 })}
@@ -123,10 +131,10 @@ export default function DailyTracker({ user, logs, challengeStatus, onLogDay }) 
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="bg-zinc-900/80 rounded-xl border border-white/10 p-6 overflow-hidden relative"
+                        className="bg-zinc-900/80 rounded-xl border border-white/10 p-4 md:p-6 overflow-hidden relative"
                     >
                         {/* Read Only/Locked Overlay */}
-                        {isDayLocked(selectedDay) && (
+                        {isLocked(selectedDay) && (
                             <div className="absolute top-0 right-0 p-2">
                                 <span className="bg-yellow-500/20 text-yellow-500 text-xs px-2 py-1 rounded border border-yellow-500/30">
                                     🔒 VIEW ONLY
@@ -136,9 +144,9 @@ export default function DailyTracker({ user, logs, challengeStatus, onLogDay }) 
 
                         <div className="flex justify-between items-center mb-6">
                             <h4 className="text-lg font-bold text-white">
-                                {isDayLocked(selectedDay) ? `History: Day ${selectedDay}` : `Log Day ${selectedDay}`}
+                                {isLocked(selectedDay) ? `History: Day ${selectedDay}` : `Log Day ${selectedDay}`}
                             </h4>
-                            <div className="text-cyan-400 font-bold text-xl">
+                            <div className="text-cyan-400 font-bold text-lg md:text-xl">
                                 Score: {completedTasks.filter(Boolean).length} / 10
                             </div>
                         </div>
@@ -147,9 +155,9 @@ export default function DailyTracker({ user, logs, challengeStatus, onLogDay }) 
                             {user.goals.map((goal, index) => (
                                 <div
                                     key={index}
-                                    className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${isDayLocked(selectedDay) ? 'opacity-80' : 'hover:bg-white/5 cursor-pointer bg-black/20'
+                                    className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${isLocked(selectedDay) ? 'opacity-80' : 'hover:bg-white/5 cursor-pointer bg-black/20'
                                         }`}
-                                    onClick={() => !isDayLocked(selectedDay) && (() => {
+                                    onClick={() => !isLocked(selectedDay) && (() => {
                                         const newTasks = [...completedTasks];
                                         newTasks[index] = !newTasks[index];
                                         setCompletedTasks(newTasks);
@@ -170,7 +178,7 @@ export default function DailyTracker({ user, logs, challengeStatus, onLogDay }) 
                             placeholder="Note for the day..."
                             value={note}
                             onChange={(e) => setNote(e.target.value)}
-                            disabled={isDayLocked(selectedDay)}
+                            disabled={isLocked(selectedDay)}
                             className="w-full bg-black/20 border border-white/10 rounded-lg p-3 text-white placeholder-gray-600 outline-none focus:border-cyan-500/50 mb-4 h-20 resize-none disabled:opacity-50"
                         />
 
@@ -181,7 +189,7 @@ export default function DailyTracker({ user, logs, challengeStatus, onLogDay }) 
                             >
                                 Close
                             </button>
-                            {!isDayLocked(selectedDay) && (
+                            {!isLocked(selectedDay) && (
                                 <button
                                     onClick={handleSave}
                                     disabled={loading}
