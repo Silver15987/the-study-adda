@@ -29,9 +29,6 @@ export default function ChallengeDashboard() {
             const statusData = await statusRes.json();
             const logsData = await logsRes.json();
 
-            console.log('API URL Base:', getApiUrl(''));
-            console.log('Me Response:', meData);
-
             if (meData.authenticated) {
                 setUser({
                     username: meData.user.username,
@@ -138,7 +135,37 @@ export default function ChallengeDashboard() {
                         <div className="bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-500/20 rounded-2xl p-8 flex items-center justify-between">
                             <div>
                                 <h1 className="text-3xl font-bold text-white mb-2">Welcome, {user.username}</h1>
-                                <p className="text-cyan-200 text-lg">Total Consistency Score: <span className="font-bold text-white">{user.totalScore}</span> / 210</p>
+
+                                <div className="mt-4 mb-2 max-w-sm">
+                                    <div className="flex justify-between text-xs text-gray-400 mb-1 uppercase tracking-wider font-bold">
+                                        <span>Today's Progress</span>
+                                        <span>{(() => {
+                                            if (!challengeStatus) return '0%';
+                                            const todayLog = logs.find(l => l.date === challengeStatus.currentDate);
+                                            const completed = todayLog ? todayLog.completedTasks.filter(Boolean).length : 0;
+                                            const total = user.goals.length || 10;
+                                            const pct = Math.round((completed / total) * 100);
+                                            return `${pct}%`;
+                                        })()}</span>
+                                    </div>
+                                    <div className="h-3 bg-white/10 rounded-full overflow-hidden border border-white/5">
+                                        <motion.div
+                                            initial={{ width: 0 }}
+                                            animate={{
+                                                width: (() => {
+                                                    if (!challengeStatus) return '0%';
+                                                    const todayLog = logs.find(l => l.date === challengeStatus.currentDate);
+                                                    const completed = todayLog ? todayLog.completedTasks.filter(Boolean).length : 0;
+                                                    const total = user.goals.length || 10;
+                                                    return `${(completed / total) * 100}%`;
+                                                })()
+                                            }}
+                                            className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]"
+                                        />
+                                    </div>
+                                </div>
+
+                                <p className="text-cyan-200 text-lg mt-3">Total Consistency Score: <span className="font-bold text-white">{user.totalScore}</span> / 210</p>
                                 <p className="text-gray-400 text-sm mt-1">
                                     Current Server Date: {challengeStatus?.currentDate} (Day {challengeStatus?.dayNumber})
                                 </p>
