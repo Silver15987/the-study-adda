@@ -1,1 +1,6 @@
+# Proxy API and Auth to Azure Backend
+/api/*  https://consistency-api-hzdugeadabf2caay.centralindia-01.azurewebsites.net/api/:splat  200
+/auth/*  https://consistency-api-hzdugeadabf2caay.centralindia-01.azurewebsites.net/auth/:splat  200
+
+# React Router Catch-All
 /* /index.html 200
