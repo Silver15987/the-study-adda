@@ -7,6 +7,7 @@ import { getApiUrl, AUTH_URL } from '../../utils/apiConfig';
 
 export default function ConsistencyChallenge() {
     const [leaderboard, setLeaderboard] = useState([]);
+    const [showAll, setShowAll] = useState(false);
 
     useEffect(() => {
         fetch(getApiUrl('/api/leaderboard'))
@@ -58,7 +59,7 @@ export default function ConsistencyChallenge() {
                             </h3>
 
                             <div className="space-y-4">
-                                {leaderboard.map((user, index) => (
+                                {(showAll ? leaderboard : leaderboard.slice(0, 5)).map((user, index) => (
                                     <motion.div
                                         key={index}
                                         initial={{ opacity: 0, x: -20 }}
@@ -81,6 +82,20 @@ export default function ConsistencyChallenge() {
                                     </motion.div>
                                 ))}
                             </div>
+
+                            {leaderboard.length > 5 && (
+                                <div className="mt-8 text-center">
+                                    <button
+                                        onClick={() => setShowAll(!showAll)}
+                                        className="text-cyan-400 hover:text-cyan-300 font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 mx-auto transition-colors"
+                                    >
+                                        {showAll ? 'Show Top 5' : 'Show All Users'}
+                                        <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${showAll ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
