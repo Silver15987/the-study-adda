@@ -25,4 +25,4 @@ dist-ssr
 .env
 
 #back-end for a seperate project:
-./tsa-web-backend
+tsa-web-backend/
