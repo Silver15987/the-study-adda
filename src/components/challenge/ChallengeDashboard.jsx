@@ -18,6 +18,13 @@ export default function ChallengeDashboard() {
     const [challengeStatus, setChallengeStatus] = useState(null);
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
+    // Local state for today's check-in to support manual saving
+    const [localForm, setLocalForm] = useState({
+        completedTasks: [],
+        note: '',
+        isDirty: false
+    });
+    const [isSaving, setIsSaving] = useState(false);
 
     const fetchData = useCallback(async () => {
         try {
@@ -68,6 +75,17 @@ export default function ChallengeDashboard() {
                 });
                 setChallengeStatus(statusData);
                 setLogs(logsData);
+
+                // Initialize local form with today's data if available
+                const todayLog = logsData.find(l => l.date === statusData.currentDate);
+                // We need to know how many goals to initialize array if no log exists
+                const goalCount = meData.user.goals ? meData.user.goals.length : 10;
+
+                setLocalForm({
+                    completedTasks: todayLog ? todayLog.completedTasks : Array(goalCount).fill(false),
+                    note: todayLog ? todayLog.note : '',
+                    isDirty: false
+                });
             } else {
                 console.warn('User not authenticated, redirecting...');
                 window.location.href = '/';
@@ -114,6 +132,39 @@ export default function ChallengeDashboard() {
         setLoading(false);
     };
 
+    // Handler for local updates (checkbox toggles)
+    const handleLocalToggle = (index) => {
+        setLocalForm(prev => {
+            const newTasks = [...prev.completedTasks];
+            newTasks[index] = !newTasks[index];
+            return { ...prev, completedTasks: newTasks, isDirty: true };
+        });
+    };
+
+    // Handler for local note modification
+    const handleLocalNote = (e) => {
+        setLocalForm(prev => ({ ...prev, note: e.target.value, isDirty: true }));
+    };
+
+    const handleSaveToday = async () => {
+        if (!challengeStatus) return;
+
+        setIsSaving(true);
+        // Call the original handleLogDay with local data
+        const success = await handleLogDay({
+            dayNumber: challengeStatus.dayNumber,
+            date: challengeStatus.currentDate,
+            completedTasks: localForm.completedTasks,
+            note: localForm.note
+        });
+
+        if (success) {
+            setLocalForm(prev => ({ ...prev, isDirty: false }));
+        }
+
+        setIsSaving(false);
+    };
+
     const handleLogDay = async (logData) => {
         try {
             let data;
@@ -146,13 +197,15 @@ export default function ChallengeDashboard() {
                 if (!MOCK_MODE) {
                     await fetchData();
                 }
-                // alert("Day logged successfully!"); // Removed to prevent spam
+                return true;
             } else {
                 alert(data.error || "Failed to log day");
+                return false;
             }
         } catch (err) {
             console.error(err);
             alert("Failed to log day");
+            return false;
         }
     };
 
@@ -198,21 +251,21 @@ export default function ChallengeDashboard() {
                                         <span>Today's Progress</span>
                                         <span>{(() => {
                                             if (!challengeStatus) return '0%';
-                                            const todayLog = logs.find(l => l.date === challengeStatus.currentDate);
-                                            const completed = todayLog ? todayLog.completedTasks.filter(Boolean).length : 0;
+                                            // Reactive to local state
+                                            const completed = localForm.completedTasks.filter(Boolean).length;
                                             const total = user.goals.length || 10;
                                             const pct = Math.round((completed / total) * 100);
                                             return `${pct}%`;
                                         })()}</span>
                                     </div>
+
                                     <div className="h-3 bg-white/10 rounded-full overflow-hidden border border-white/5">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             animate={{
                                                 width: (() => {
                                                     if (!challengeStatus) return '0%';
-                                                    const todayLog = logs.find(l => l.date === challengeStatus.currentDate);
-                                                    const completed = todayLog ? todayLog.completedTasks.filter(Boolean).length : 0;
+                                                    const completed = localForm.completedTasks.filter(Boolean).length;
                                                     const total = user.goals.length || 10;
                                                     return `${(completed / total) * 100}%`;
                                                 })()
@@ -283,9 +336,8 @@ export default function ChallengeDashboard() {
                             {/* Today's Checklist */}
                             <div className="space-y-3">
                                 {user.goals.map((goal, index) => {
-                                    // Derive status from logs
-                                    const todayLog = logs.find(l => l.date === challengeStatus?.currentDate);
-                                    const isCompleted = todayLog ? todayLog.completedTasks[index] : false;
+                                    // Use localForm state
+                                    const isCompleted = localForm.completedTasks[index] || false;
 
                                     return (
                                         <div
@@ -294,18 +346,7 @@ export default function ChallengeDashboard() {
                                                 ? 'bg-cyan-500/10 border-cyan-500/50'
                                                 : 'bg-white/5 border-white/10 hover:bg-white/10'
                                                 }`}
-                                            onClick={() => {
-                                                const todayLog = logs.find(l => l.date === challengeStatus?.currentDate);
-                                                const currentTasks = todayLog ? [...todayLog.completedTasks] : Array(user.goals.length).fill(false);
-                                                currentTasks[index] = !currentTasks[index];
-
-                                                handleLogDay({
-                                                    dayNumber: challengeStatus?.dayNumber,
-                                                    date: challengeStatus?.currentDate,
-                                                    completedTasks: currentTasks,
-                                                    note: todayLog?.note || ''
-                                                });
-                                            }}
+                                            onClick={() => handleLocalToggle(index)}
                                         >
                                             <div className={`w-6 h-6 rounded border flex items-center justify-center transition-all ${isCompleted
                                                 ? 'bg-cyan-500 border-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.4)]'
@@ -329,36 +370,30 @@ export default function ChallengeDashboard() {
                                 <textarea
                                     className="w-full bg-black/20 border border-white/10 rounded-lg p-3 text-white placeholder-gray-600 focus:border-cyan-500/50 outline-none text-sm resize-none h-24"
                                     placeholder="How did today go?"
-                                    value={(() => {
-                                        const todayLog = logs.find(l => l.date === challengeStatus?.currentDate);
-                                        return todayLog?.note || '';
-                                    })()}
-                                    onChange={(e) => {
-                                        // Debounce could be good here, for now direct update relative to local state might be tricky without local state.
-                                        // Wait, handleLogDay triggers a fetch. Key-by-key fetch is BAD. 
-                                        // We need local state for the note or a "Check-in" button.
-                                        // Implementing "Check-in" button pattern for notes is safer, or onBlur.
-                                    }}
-                                    onBlur={(e) => {
-                                        const todayLog = logs.find(l => l.date === challengeStatus?.currentDate);
-                                        const currentTasks = todayLog ? [...todayLog.completedTasks] : Array(user.goals.length).fill(false);
-                                        if (todayLog?.note !== e.target.value) {
-                                            handleLogDay({
-                                                dayNumber: challengeStatus?.dayNumber,
-                                                date: challengeStatus?.currentDate,
-                                                completedTasks: currentTasks,
-                                                note: e.target.value
-                                            });
-                                        }
-                                    }}
+                                    value={localForm.note}
+                                    onChange={handleLocalNote}
                                 />
-                                <p className="text-[10px] text-gray-500 mt-1 text-right">Updates saved automatically on click/blur.</p>
+                                <div className="flex justify-between items-center mt-3">
+                                    <p className="text-[10px] text-gray-500">
+                                        {localForm.isDirty ? <span className="text-yellow-500 font-bold">⚠ Unsaved changes</span> : "All changes saved"}
+                                    </p>
+                                    <button
+                                        onClick={handleSaveToday}
+                                        disabled={!localForm.isDirty || isSaving}
+                                        className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${!localForm.isDirty
+                                            ? 'bg-white/5 text-gray-500 cursor-not-allowed'
+                                            : 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-500/20'
+                                            }`}
+                                    >
+                                        {isSaving ? 'Saving...' : 'Save Progress'}
+                                    </button>
+                                </div>
                             </div>
 
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
