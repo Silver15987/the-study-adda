@@ -26,3 +26,6 @@ dist-ssr
 
 #back-end for a seperate project:
 tsa-web-backend/
+./dist
+./node_modules
+
