@@ -1,5 +1,5 @@
 import Hero from '../components/Hero';
-import FactionShowcase from '../components/FactionShowcase';
+import ConsistencyChallenge from '../components/challenge/ConsistencyChallenge';
 import Features from '../components/Features';
 import HallOfFame from '../components/HallOfFame';
 import Clubs from '../components/Clubs';
@@ -9,7 +9,7 @@ export default function Home() {
     return (
         <>
             <Hero />
-            <FactionShowcase />
+            <ConsistencyChallenge />
             <Features />
             <HallOfFame />
             <Clubs />
