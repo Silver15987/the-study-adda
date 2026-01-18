@@ -29,6 +29,9 @@ export default function ChallengeDashboard() {
             const statusData = await statusRes.json();
             const logsData = await logsRes.json();
 
+            console.log('API URL Base:', getApiUrl(''));
+            console.log('Me Response:', meData);
+
             if (meData.authenticated) {
                 setUser({
                     username: meData.user.username,
@@ -39,7 +42,8 @@ export default function ChallengeDashboard() {
                 setChallengeStatus(statusData);
                 setLogs(logsData);
             } else {
-                window.location.href = '/';
+                console.warn('User not authenticated, redirecting...');
+                // window.location.href = '/'; // Commented out for debugging
             }
         } catch (err) {
             console.error("Failed to load dashboard data:", err);
