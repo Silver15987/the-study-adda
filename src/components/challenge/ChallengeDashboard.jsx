@@ -4,6 +4,7 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, R
 import DailyGoalsSetup from './DailyGoalsSetup';
 import DailyTracker from './DailyTracker';
 import TimeTravelDebug from './TimeTravelDebug';
+import { getApiUrl, AUTH_URL } from '../../utils/apiConfig';
 
 export default function ChallengeDashboard() {
     const [user, setUser] = useState({
@@ -19,9 +20,9 @@ export default function ChallengeDashboard() {
     const fetchData = useCallback(async () => {
         try {
             const [meRes, statusRes, logsRes] = await Promise.all([
-                fetch('http://localhost:5000/auth/me', { credentials: 'include' }),
-                fetch('http://localhost:5000/api/challenge/status', { credentials: 'include' }),
-                fetch('http://localhost:5000/api/challenge/logs', { credentials: 'include' })
+                fetch(getApiUrl('/auth/me'), { credentials: 'include' }),
+                fetch(getApiUrl('/api/challenge/status'), { credentials: 'include' }),
+                fetch(getApiUrl('/api/challenge/logs'), { credentials: 'include' })
             ]);
 
             const meData = await meRes.json();
@@ -54,7 +55,7 @@ export default function ChallengeDashboard() {
     const handleSaveGoals = async (goals) => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:5000/api/challenge/start', {
+            const res = await fetch(getApiUrl('/api/challenge/start'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -76,7 +77,7 @@ export default function ChallengeDashboard() {
 
     const handleLogDay = async (logData) => {
         try {
-            const res = await fetch('http://localhost:5000/api/challenge/log', {
+            const res = await fetch(getApiUrl('/api/challenge/log'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',

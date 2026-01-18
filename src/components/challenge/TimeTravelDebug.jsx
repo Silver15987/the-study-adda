@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getApiUrl } from '../../utils/apiConfig';
 
 export default function TimeTravelDebug({ onTimeChange }) {
     const [isVisible, setIsVisible] = useState(false);
@@ -24,7 +25,7 @@ export default function TimeTravelDebug({ onTimeChange }) {
     const handleTravel = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:5000/api/dev/set-time', {
+            const res = await fetch(getApiUrl('/api/dev/set-time'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',

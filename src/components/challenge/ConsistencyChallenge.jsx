@@ -1,18 +1,15 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { getApiUrl, AUTH_URL } from '../../utils/apiConfig';
 
 // Mock Leaderboard Data (until API is connected)
-const mockLeaderboard = [
-    { username: 'CosmicTraveler', totalScore: 185, avatar: 'https://cdn.discordapp.com/embed/avatars/0.png' },
-    { username: 'StarGazer99', totalScore: 172, avatar: 'https://cdn.discordapp.com/embed/avatars/1.png' },
-    { username: 'NebulaDrifter', totalScore: 160, avatar: 'https://cdn.discordapp.com/embed/avatars/2.png' },
-];
+
 
 export default function ConsistencyChallenge() {
     const [leaderboard, setLeaderboard] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/leaderboard')
+        fetch(getApiUrl('/api/leaderboard'))
             .then(res => res.json())
             .then(data => setLeaderboard(data))
             .catch(err => console.error("Failed to fetch leaderboard:", err));
@@ -20,7 +17,7 @@ export default function ConsistencyChallenge() {
 
     const handleLogin = () => {
         // Redirect to Backend Auth
-        window.location.href = 'http://localhost:5000/auth/discord';
+        window.location.href = `${AUTH_URL}/discord`;
     };
 
     return (
