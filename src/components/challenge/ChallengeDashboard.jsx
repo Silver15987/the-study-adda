@@ -146,7 +146,7 @@ export default function ChallengeDashboard() {
                 if (!MOCK_MODE) {
                     await fetchData();
                 }
-                alert("Day logged successfully!");
+                // alert("Day logged successfully!"); // Removed to prevent spam
             } else {
                 alert(data.error || "Failed to log day");
             }
