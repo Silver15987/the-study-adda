@@ -37,7 +37,7 @@ export default function ConsistencyChallenge() {
                         CONSISTENCY <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-400">CHALLENGE</span>
                     </h2>
                     <p className="text-gray-300 max-w-2xl mx-auto text-lg leading-relaxed">
-                        21 Days. 10 Daily Goals. One Champion. <br />
+                        21 Days. Daily Goals. One Champion. <br />
                         Prove your discipline and climb the cosmic ranks.
                     </p>
 
