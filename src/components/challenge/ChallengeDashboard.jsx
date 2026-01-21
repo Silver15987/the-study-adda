@@ -319,7 +319,7 @@ export default function ChallengeDashboard() {
                             logs={logs}
                             challengeStatus={challengeStatus}
                             onLogDay={handleLogDay}
-                            readOnly={true} // Now acts primarily as history
+                        // readOnly removed to allow smart locking logic
                         />
                     </div>
 

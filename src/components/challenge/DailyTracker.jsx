@@ -46,10 +46,19 @@ export default function DailyTracker({ user, logs, challengeStatus, onLogDay, re
     const isDayLocked = (day) => {
         if (!challengeStatus) return true;
 
-        // Locked if it's NOT today OR yesterday
-        // Note: challengeStatus.dayNumber is "Today"
-        // So day < curDay - 1 is definitely locked
-        return day < challengeStatus.dayNumber - 1;
+        const currentDay = challengeStatus.dayNumber;
+        const isGracePeriodActive = challengeStatus.isGracePeriodActive;
+
+        // If day is Today: Unlocked
+        if (day === currentDay) return false;
+
+        // If day is Yesterday: Unlocked ONLY if Grace Period is active
+        if (day === currentDay - 1) {
+            return !isGracePeriodActive; // Locked if grace period EXPIRED (false)
+        }
+
+        // All other past days are locked
+        return true;
     };
 
 
